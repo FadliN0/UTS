@@ -5,7 +5,7 @@ import { addProgress } from '../../../store/reducer/progressSlice';
 
 interface CourseTopicProps {
   onNextContent: () => void;
-  topic: Array<{ id: number; description: string }>;
+  topic: { id: number; description: string; }[];
 }
 
 export default function CourseTopic(props: CourseTopicProps) {
