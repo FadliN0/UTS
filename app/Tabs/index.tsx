@@ -1,4 +1,5 @@
 import { FlatList } from "react-native";
+import { ToastAndroid } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import axios from "axios";
@@ -16,11 +17,18 @@ export default function HomeScreen() {
       .then(response =>{
       dispatch(setKursus(response.data.data))
       }).catch((error)=>{
-        console.log(error);
+      dispatch(setKursus([]));
+      const message = error?.message ||'Gagal mengambil data';
+
+      ToastAndroid.showWithGravity(
+        message,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
       })
   }
-  const onGoToDetail = () => {
-        router.push('/detail');
+  const onGoToDetail = (itemId:String) => {
+        router.push(`/detail?id=${itemId}`);
     };
 
     const onStartCourse = () => {
@@ -39,7 +47,7 @@ export default function HomeScreen() {
                 data={kursusList}
                 renderItem={({item}) => 
                   <CourseCard
-                      onGoToDetail ={onGoToDetail}
+                      onGoToDetail ={()=> onGoToDetail(item._id)}
                       onStartCourse = {onStartCourse}
                       category={item.category}
                       title={item.title}

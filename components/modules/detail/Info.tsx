@@ -1,13 +1,17 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 
-export const Info = () => {
+interface InfoProps{
+    description?:string;
+}
+
+export const Info = (props:InfoProps) => {
     return (
         <ScrollView contentContainerStyle={styles.scroll}>
-            <View style={styles.container}>
-                <Text style={styles.header}>📱 Expo for React Native</Text>
+            {/* <View style={styles.container}> */}
+                <Text style={styles.header}>{props.description}</Text>
 
-                <View style={styles.section}>
+                {/* <View style={styles.section}>
                     <Text style={styles.sectionTitle}>🎯 Apa yang Akan Saya Pelajari?</Text>
                     <Text style={styles.listItem}>• Dasar-dasar penggunaan Expo</Text>
                     <Text style={styles.listItem}>• Membuat proyek dengan Expo CLI</Text>
@@ -36,7 +40,7 @@ export const Info = () => {
                     <Text style={styles.salary}>💰 $70,000 - $100,000 / tahun</Text>
                     <Text style={styles.note}>(Tergantung pengalaman & lokasi kerja)</Text>
                 </View>
-            </View>
+            </View> */}
         </ScrollView>
     );
 };

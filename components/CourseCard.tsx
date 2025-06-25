@@ -156,8 +156,8 @@ export const CourseCard = (props: CourseCardType) => {
               </View>
             </View>
 
-            {/* Kursus Coming Soon */}
-            {/* <View style={styles.cardContainer}>
+            {/* Kursus Coming Soon
+            <View style={styles.cardContainer}>
               <Image
                 source={{ uri: "https://reactjs.org/logo-og.png" }}
                 style={styles.imageStyle}
