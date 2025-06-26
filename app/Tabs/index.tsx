@@ -1,32 +1,42 @@
-import { FlatList } from "react-native";
+import { FlatList, TextInput,StyleSheet, Button, View } from "react-native";
 import { ToastAndroid } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {setKursus} from '../../store/reducer/kursusSlice'
 import { CourseCard } from "@/components/CourseCard";
 
 
+
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const kursusList = useSelector(state => state.kursus.data);
-  const onGetData = async () =>{
-      axios.get('https://e-learning-api-theta.vercel.app/api/kursus')
-      .then(response =>{
-      dispatch(setKursus(response.data.data))
-      }).catch((error)=>{
-      dispatch(setKursus([]));
-      const message = error?.message ||'Gagal mengambil data';
-
-      ToastAndroid.showWithGravity(
-        message,
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-      );
-      })
-  }
+  const [searchQuery, setSearchQuery] = useState("");
+  const onGetData = async () => {
+    try {
+        dispatch(setKursus([]));
+        const params = {
+            filter: searchQuery,
+        };
+        
+        const response = await axios.get('https://e-learning-api-theta.vercel.app/api/kursus', 
+            { params }
+        );
+        
+        dispatch(setKursus(response.data.data));
+    } catch (error) {
+        dispatch(setKursus([]));
+        const message = error?.message || 'Gagal mengambil data';
+        
+        ToastAndroid.showWithGravity(
+            message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+        );
+    }
+}
   const onGoToDetail = (itemId:String) => {
         router.push(`/detail?id=${itemId}`);
     };
@@ -41,6 +51,20 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaProvider>
+      <View style={styles.container}>
+                <TextInput 
+                    style={styles.input} 
+                    placeholder="Search..."
+                    value={searchQuery} 
+                    onChangeText={setSearchQuery}
+                />
+                <View style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                        title="Submit"
+                        onPress={()=>onGetData()}
+                    />
+                </View>
+            </View>
       <FlatList 
                 onRefresh={() => onGetData()}
                 refreshing={false}
@@ -60,4 +84,22 @@ export default function HomeScreen() {
     </SafeAreaProvider>
   );
 };
+
+const styles = StyleSheet.create({
+    container:{
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    input: {
+        flex: 1,
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+    },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+})
 // export default Home;
