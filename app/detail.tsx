@@ -12,6 +12,7 @@ const Detail = () => {
     const [activeTabs, setActiveTabs] = useState("info");
     const {id} = useLocalSearchParams();
     const [description, setDescription] = useState('')
+    const [itemTopic, setItemTopic] = useState([]);
     const indicatorPosition = useRef(new Animated.Value(0)).current;
     const handleTabPress = (tab: string, position: number) => {
         setActiveTabs(tab);
@@ -21,28 +22,31 @@ const Detail = () => {
         }).start();
     };
 
-    const onGetData = async () =>{
-        axios.get(`https://e-learning-api-theta.vercel.app/api/kursus/${id}`)
-        .then(response =>{
-            (setDescription(response.data.data.deskripsi));
-            if(response.data.data.content && response.data.data.content.length > 0){
-                const topic = response.data.data.content.map((item:any, index:Number) =>{
-                    return{
-                        id:index.toString(),
-                        title:item.type,
-                        describe:item.type,
+    const onGetData = async () => {
+        try {
+            const response = await axios.get(`https://e-learning-api-theta.vercel.app/api/kursus/${id}`);
+
+            setDescription(response.data.data.deskripsi);
+
+            if(response.data.data.content && response.data.data.content.length > 0) {
+                const topic = response.data.data.content.map((item:any, index:Number) => {
+                    return {
+                        id: index.toString(),
+                        title: item.type,
+                        describe: item.type,
                     }
                 });
+                setItemTopic(topic);
             }
-        }).catch((error)=>{
-            const message = error?.message ||'Gagal mengambil data';
-
-        ToastAndroid.showWithGravity(
-            message,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
-        );
-        })
+            
+        } catch (error) {
+            const message = error?.message || 'Gagal mengambil data';
+            // ToastAndroid.showWithGravity(
+            //     message,
+            //     ToastAndroid.SHORT,
+            //     ToastAndroid.CENTER,
+            // );
+        }
     }
 
   const UIActiveTabs = () => {
@@ -87,7 +91,7 @@ const Detail = () => {
 
             {/* Content */}
             <View style={styles.contentContainer}>
-                {activeTabs === "info" ? <Info /> : <Materi />}
+                <UIActiveTabs/>
             </View>
         </View>
     );

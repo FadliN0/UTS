@@ -9,7 +9,7 @@ export const Info = (props:InfoProps) => {
     return (
         <ScrollView contentContainerStyle={styles.scroll}>
             {/* <View style={styles.container}> */}
-                <Text style={styles.header}>{props.description}</Text>
+                <Text>{props.description}</Text>
 
                 {/* <View style={styles.section}>
                     <Text style={styles.sectionTitle}>🎯 Apa yang Akan Saya Pelajari?</Text>

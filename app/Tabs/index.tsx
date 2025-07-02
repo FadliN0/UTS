@@ -41,8 +41,8 @@ export default function HomeScreen() {
         router.push(`/detail?id=${itemId}`);
     };
 
-    const onStartCourse = () => {
-        router.push('/course');
+    const onStartCourse = (itemId:String) => {
+        router.push(`/course?id=${itemId}`);
     };
 
   useEffect(() => {
